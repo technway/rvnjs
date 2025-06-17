@@ -163,32 +163,18 @@ const fullName = getDisplayName({
 
 | Feature               | Main Logger (`logger()`)     | Development Logger (`devLog`, etc.) |
 | --------------------- | ---------------------------- | ----------------------------------- |
-| **Availability**      | Always available             | Only in development mode            |
-| **Configuration**     | Controlled by env vars       | Always enabled in development       |
+| **Availability**      | When logging is enabled      | Only in development mode            |
+| **Configuration**     | Controlled by env vars       | Controlled by environment mode      |
 | **Interface**         | Method-based (`log.debug()`) | Function-based (`devLog()`)         |
 | **Customization**     | Fixed emoji prefixes         | Customizable prefixes               |
-| **Use Case**          | Production logging           | Development debugging               |
-| **Performance**       | Optimized for production     | Development-focused                 |
+| **Use Case**          | Application logging          | Development debugging               |
+| **Performance**       | No overhead when disabled    | No overhead when not in dev mode    |
 | **Data Handling**     | Multiple arguments           | Single data object                  |
 | **Advanced Features** | Not supported                | Not supported                       |
 
-**When to use which:**
-
-- **Use Main Logger (`logger()`)** when:
-  - You need logging in both development and production
-  - You want consistent logging across environments
-  - You need to control logging via environment variables
-  - You're logging application events or errors
-
-- **Use Development Logger (`devLog`, etc.)** when:
-  - You're debugging during development
-  - You want simpler, more direct logging
-  - You need custom prefixes for different types of logs
-  - You're logging temporary debug information
-
 | Function           | Description                                                   | Parameters | Returns                                                              | Notes                                                                                                                                                                                                                       |
 | ------------------ | ------------------------------------------------------------- | ---------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isLoggingEnabled` | Returns true if logging is enabled in the current environment | None       | `boolean` - True if logging is enabled                               | Automatically enabled in development mode. Can be explicitly enabled via environment variables. **Optional environment variables:** `VITE_ENABLE_LOGGING=true` (Vite) or `NEXT_PUBLIC_ENABLE_LOGGING=true` (Next.js).       |
+| `isLoggingEnabled` | Returns true if logging is enabled in the current environment | None       | `boolean` - True if logging is enabled                               | Checks for explicit logging flags. **Optional environment variables:** `VITE_ENABLE_LOGGING=true` (Vite) or `NEXT_PUBLIC_ENABLE_LOGGING=true` (Next.js).                                                                    |
 | `logger`           | Returns a logger instance with emoji-enhanced logging methods | None       | `LoggerType` - Logger instance with debug, info, warn, error methods | Each log level has a unique emoji prefix. Logging only occurs when `isLoggingEnabled()` returns true. **Optional environment variables:** `VITE_ENABLE_LOGGING=true` (Vite) or `NEXT_PUBLIC_ENABLE_LOGGING=true` (Next.js). |
 
 **Development-Only Logging Utilities:**

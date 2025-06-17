@@ -51,19 +51,14 @@ export function getApiBaseUrl({
 /**
  * Checks if the current environment is development.
  * Returns true if:
- * - NODE_ENV is 'development'
- * - NEXT_PUBLIC_ENABLE_LOGGING is 'true' (Next.js)
- * - VITE_ENABLE_LOGGING is 'true' (Vite)
+ * - NODE_ENV is 'development' (Next.js)
+ * - MODE is 'development' (Vite)
  *
  * @returns True if in development environment.
  */
 export function isDevEnv(): boolean {
   return (
-    (isNextRuntime() &&
-      (process.env.NODE_ENV === 'development' ||
-        process.env.NEXT_PUBLIC_ENABLE_LOGGING === 'true')) ||
-    (isViteRuntime() &&
-      (import.meta.env.MODE === 'development' ||
-        import.meta.env.VITE_ENABLE_LOGGING === 'true'))
+    (isNextRuntime() && process.env.NODE_ENV === 'development') ||
+    (isViteRuntime() && import.meta.env.MODE === 'development')
   );
 }

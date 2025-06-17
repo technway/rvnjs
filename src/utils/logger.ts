@@ -1,3 +1,4 @@
+import { isNextRuntime, isViteRuntime } from '../internal/env';
 import { isDevEnv } from './env';
 
 /**
@@ -52,15 +53,23 @@ interface LoggerType {
  * Returns true if logging is enabled in the current environment.
  *
  * Checks both Next.js and Vite environment variables, and enables logging in development mode by default.
+ * For Next.js:
+ * - NODE_ENV === 'development'
+ * - NEXT_PUBLIC_ENABLE_LOGGING === 'true'
+ * For Vite:
+ * - MODE === 'development'
+ * - VITE_ENABLE_LOGGING === 'true'
  *
  * @returns True if logging is enabled, false otherwise.
  */
 export function isLoggingEnabled(): boolean {
   return (
-    process.env.NEXT_PUBLIC_ENABLE_LOGGING === 'true' ||
-    import.meta.env.VITE_ENABLE_LOGGING === 'true' ||
-    process.env.NODE_ENV === 'development' ||
-    import.meta.env.MODE === 'development'
+    (isNextRuntime() &&
+      (process.env.NODE_ENV === 'development' ||
+        process.env.NEXT_PUBLIC_ENABLE_LOGGING === 'true')) ||
+    (isViteRuntime() &&
+      (import.meta.env?.MODE === 'development' ||
+        import.meta.env?.VITE_ENABLE_LOGGING === 'true'))
   );
 }
 

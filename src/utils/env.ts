@@ -1,3 +1,5 @@
+import { isNextRuntime, isViteRuntime } from '../internal/env';
+
 /**
  * Options for getting the API base URL.
  */
@@ -31,11 +33,15 @@ export function getApiBaseUrl({
     return customBaseUrl;
   }
 
-  const baseUrl =
-    (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
-    (typeof import.meta !== 'undefined' && import.meta.env.VITE_API_BASE_URL) ||
-    (typeof process !== 'undefined' && process.env.API_URL) ||
-    '';
+  let baseUrl = '';
+
+  if (isNextRuntime() && process.env.NEXT_PUBLIC_API_URL) {
+    baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  } else if (isViteRuntime() && import.meta.env?.VITE_API_BASE_URL) {
+    baseUrl = import.meta.env.VITE_API_BASE_URL;
+  } else if (isNextRuntime() && process.env.API_URL) {
+    baseUrl = process.env.API_URL;
+  }
 
   return customApiPath
     ? `${baseUrl.replace(/\/$/, '')}/${customApiPath.replace(/^\//, '')}`
@@ -46,37 +52,18 @@ export function getApiBaseUrl({
  * Checks if the current environment is development.
  * Returns true if:
  * - NODE_ENV is 'development'
- * - VITE_ENABLE_LOGGING is 'true'
+ * - NEXT_PUBLIC_ENABLE_LOGGING is 'true' (Next.js)
+ * - VITE_ENABLE_LOGGING is 'true' (Vite)
  *
  * @returns True if in development environment.
  */
 export function isDevEnv(): boolean {
   return (
-    (typeof process !== 'undefined' &&
-      process.env.NODE_ENV === 'development') ||
-    (typeof import.meta !== 'undefined' &&
-      import.meta.env.VITE_ENABLE_LOGGING === 'true')
-  );
-}
-
-/**
- * Checks if the current runtime is Next.js.
- * Returns true if process.env.NEXT_PUBLIC_API_URL is defined.
- *
- * @returns True if running in Next.js.
- */
-export function isNextRuntime(): boolean {
-  return typeof process !== 'undefined' && !!process.env.NEXT_PUBLIC_API_URL;
-}
-
-/**
- * Checks if the current runtime is Vite.
- * Returns true if import.meta.env.VITE_API_BASE_URL is defined.
- *
- * @returns True if running in Vite.
- */
-export function isViteRuntime(): boolean {
-  return (
-    typeof import.meta !== 'undefined' && !!import.meta.env.VITE_API_BASE_URL
+    (isNextRuntime() &&
+      (process.env.NODE_ENV === 'development' ||
+        process.env.NEXT_PUBLIC_ENABLE_LOGGING === 'true')) ||
+    (isViteRuntime() &&
+      (import.meta.env.MODE === 'development' ||
+        import.meta.env.VITE_ENABLE_LOGGING === 'true'))
   );
 }

@@ -1,10 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import {
-  getApiBaseUrl,
-  isDevEnv,
-  isNextRuntime,
-  isViteRuntime,
-} from '../utils/env';
+import { getApiBaseUrl, isDevEnv } from '../utils/env';
 
 describe('Environment Utilities', () => {
   const originalEnv = process.env;
@@ -83,34 +78,6 @@ describe('Environment Utilities', () => {
     it('returns false in production environment', () => {
       process.env.NODE_ENV = 'production';
       expect(isDevEnv()).toBe(false);
-    });
-  });
-
-  describe('isNextRuntime', () => {
-    it('returns true when NEXT_PUBLIC_API_URL is defined', () => {
-      process.env.NEXT_PUBLIC_API_URL = 'https://api.example.com';
-      expect(isNextRuntime()).toBe(true);
-    });
-
-    it('returns false when NEXT_PUBLIC_API_URL is not defined', () => {
-      delete process.env.NEXT_PUBLIC_API_URL;
-      expect(isNextRuntime()).toBe(false);
-    });
-  });
-
-  describe('isViteRuntime', () => {
-    it.skip('returns true when VITE_API_BASE_URL is defined', () => {
-      // Skipped: import.meta.env cannot be reliably mocked in Vitest/node
-      vi.stubGlobal('import.meta', {
-        env: { VITE_API_BASE_URL: 'https://api.example.com' },
-      });
-      expect(isViteRuntime()).toBe(true);
-    });
-
-    it.skip('returns false when VITE_API_BASE_URL is not defined', () => {
-      // Skipped: import.meta.env cannot be reliably mocked in Vitest/node
-      vi.stubGlobal('import.meta', { env: {} });
-      expect(isViteRuntime()).toBe(false);
     });
   });
 });

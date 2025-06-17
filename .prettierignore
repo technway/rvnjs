@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+coverage/
+
+# Logs
+*.log
+
+# Environment files
+.env*
+
+# Package files
+package-lock.json
+yarn.lock
+
+# Documentation
+CHANGELOG.md
+
+# Git
+.git/
+.husky/

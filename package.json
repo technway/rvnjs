@@ -1,0 +1,98 @@
+{
+  "name": "@technway/rvnjs",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "description": "Minimal utility functions for Vite + React, and Next.js",
+  "author": {
+    "name": "Technway Solutions",
+    "url": "https://technway.biz"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/technway/rvnjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/technway/rvnjs/issues"
+  },
+  "homepage": "https://github.com/technway/rvnjs#readme",
+  "keywords": [
+    "react",
+    "vite",
+    "nextjs",
+    "utils",
+    "helpers",
+    "typescript",
+    "rvnjs",
+    "env",
+    "utilities",
+    "frontend"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "type-check": "tsc --noEmit",
+    "clean": "node -e \"if (require('fs').existsSync('dist')) require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "prebuild": "pnpm run clean",
+    "prepare": "husky",
+    "prepublishOnly": "pnpm run build && pnpm run test && pnpm run type-check",
+    "pre-commit": "pnpm run format:check && pnpm run lint && pnpm run type-check"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^9.29.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.34.1",
+    "@typescript-eslint/parser": "^8.34.1",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
+  },
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  }
+}

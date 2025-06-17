@@ -1,0 +1,44 @@
+name: Question
+description: Ask a question about @technway/rvnjs
+title: "Q: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your question!
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What would you like to know?
+      placeholder: Your question here
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide any relevant context
+      placeholder: What are you trying to achieve?
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What I've Tried
+      description: What have you tried so far?
+      placeholder: Describe your attempts
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Your development environment
+      placeholder: |
+        - Node.js version:
+        - pnpm version:
+        - OS:
+        - Browser (if applicable):
+    validations:
+      required: false

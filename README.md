@@ -1,12 +1,12 @@
 <div align="center">
 
-<h1>RVNJS - React using Vite & Next.js Utilities</h1>
+<img src="https://github.com/user-attachments/assets/867c5d8c-0c1a-45f1-87ce-cf333c4987ba" alt="RVNJS Logo" width="190">
 
-<img src="https://github.com/user-attachments/assets/91e4b5dc-2db5-42d3-8814-586f3def72dd" alt="RVNJS Logo" width="130">
+<h1>RVNJS - React using Vite & Next.js Utilities</h1>
 
 <p>A minimal utility library providing essential functions for Vite + React and Next.js applications.</p>
 
-<a href="https://www.npmjs.com/package/@technway/rvnjs"><img src="https://img.shields.io/npm/v/@technway/rvnjs.svg" alt="npm version"></a> <a href="https://github.com/technway/rvnjs/actions"><img src="https://github.com/technway/rvnjs/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a> <a href="https://github.com/technway/rvnjs/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/rvnjs.svg" alt="License"></a> <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0%2B-blue.svg" alt="TypeScript"></a>
+<a href="https://www.npmjs.com/package/@technway/rvnjs"><img src="https://img.shields.io/npm/v/@technway/rvnjs.svg" alt="npm version"></a> <a href="https://github.com/technway/rvnjs/actions"><img src="https://github.com/technway/rvnjs/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a> <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0%2B-blue.svg" alt="TypeScript"></a>
 
 </div>
 

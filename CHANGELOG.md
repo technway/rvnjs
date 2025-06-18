@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/technway/rvnjs/compare/rvnjs-v0.2.0...rvnjs-v0.3.0) (2025-06-18)
+
+
+### Features
+
+* **users:** add new avatar utility and deprecate legacy photo util ([9ac4e07](https://github.com/technway/rvnjs/commit/9ac4e078aae5c38533d1c485fa4f4efebc8c19f8))
+
 ## [0.2.0](https://github.com/technway/rvnjs/compare/rvnjs-v0.1.225...rvnjs-v0.2.0) (2025-06-18)
 
 

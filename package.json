@@ -1,6 +1,6 @@
 {
   "name": "@technway/rvnjs",
-  "version": "0.1.225",
+  "version": "0.2.0",
   "description": "Minimal utility functions for Vite + React, and Next.js",
   "author": {
     "name": "Technway Solutions",

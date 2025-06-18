@@ -22,12 +22,27 @@ describe('Environment Utilities', () => {
       expect(result).toBe('https://api.example.com');
     });
 
+    it('removes trailing slash from custom base URL', () => {
+      const result = getApiBaseUrl({
+        customBaseUrl: 'https://api.example.com/',
+      });
+      expect(result).toBe('https://api.example.com');
+    });
+
     it('returns custom base URL with API path when both provided', () => {
       delete process.env.NEXT_PUBLIC_API_URL;
       delete process.env.API_URL;
       const result = getApiBaseUrl({
         customBaseUrl: 'https://api.example.com',
         customApiPath: 'v1',
+      });
+      expect(result).toBe('https://api.example.com/v1');
+    });
+
+    it('handles trailing slash in customBaseUrl and leading slash in customApiPath', () => {
+      const result = getApiBaseUrl({
+        customBaseUrl: 'https://api.example.com/',
+        customApiPath: '/v1',
       });
       expect(result).toBe('https://api.example.com/v1');
     });
@@ -58,6 +73,14 @@ describe('Environment Utilities', () => {
       delete process.env.API_URL;
       const result = getApiBaseUrl();
       expect(result).toBe('');
+    });
+
+    it('handles multiple trailing slashes', () => {
+      const result = getApiBaseUrl({
+        customBaseUrl: 'https://api.example.com///',
+        customApiPath: '///v1///',
+      });
+      expect(result).toBe('https://api.example.com/v1');
     });
   });
 

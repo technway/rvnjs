@@ -1,5 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { getDefaultProfilePhoto, getDisplayName } from '../utils/user';
+import {
+  getDefaultProfilePhoto,
+  getDisplayName,
+  resolveAvatar,
+} from '../utils/user';
 
 describe('User Utilities', () => {
   const originalEnv = process.env;
@@ -11,6 +15,98 @@ describe('User Utilities', () => {
 
   afterEach(() => {
     process.env = originalEnv;
+  });
+
+  describe('resolveAvatar', () => {
+    beforeEach(() => {
+      process.env.NEXT_PUBLIC_API_URL = 'https://api.example.com';
+    });
+
+    it('returns HTTPS URLs as-is', () => {
+      const result = resolveAvatar({
+        path: 'https://example.com/photo.jpg',
+      });
+      expect(result).toBe('https://example.com/photo.jpg');
+    });
+
+    it('returns HTTP URLs in development mode', () => {
+      process.env.NODE_ENV = 'development';
+      const result = resolveAvatar({
+        path: 'http://example.com/photo.jpg',
+      });
+      expect(result).toBe('http://example.com/photo.jpg');
+    });
+
+    it('returns fallback for HTTP URLs in production mode', () => {
+      process.env.NODE_ENV = 'production';
+      const result = resolveAvatar({
+        path: 'http://example.com/photo.jpg',
+        fallback: '/default.webp',
+      });
+      expect(result).toBe('/default.webp');
+    });
+
+    it('prefixes relative paths with API base URL', () => {
+      const result = resolveAvatar({
+        path: '/uploads/photo.jpg',
+      });
+      expect(result).toBe('https://api.example.com/uploads/photo.jpg');
+    });
+
+    it('prefixes relative paths with custom base URL', () => {
+      const result = resolveAvatar({
+        path: '/uploads/photo.jpg',
+        baseUrl: 'https://custom.example.com',
+      });
+      expect(result).toBe('https://custom.example.com/uploads/photo.jpg');
+    });
+
+    it('returns path as-is when baseUrl is false', () => {
+      const result = resolveAvatar({
+        path: '/uploads/photo.jpg',
+        baseUrl: false,
+      });
+      expect(result).toBe('/uploads/photo.jpg');
+    });
+
+    it('returns fallback when path is null', () => {
+      const result = resolveAvatar({
+        path: null,
+        fallback: '/default.webp',
+      });
+      expect(result).toBe('/default.webp');
+    });
+
+    it('returns fallback when path is empty string', () => {
+      const result = resolveAvatar({
+        path: '',
+        fallback: '/default.webp',
+      });
+      expect(result).toBe('/default.webp');
+    });
+
+    it('returns default fallback when not specified', () => {
+      const result = resolveAvatar({
+        path: null,
+      });
+      expect(result).toBe('/avatars/avatar.webp');
+    });
+
+    it('handles trailing slashes in base URL', () => {
+      const result = resolveAvatar({
+        path: 'photo.jpg',
+        baseUrl: 'https://example.com/',
+      });
+      expect(result).toBe('https://example.com/photo.jpg');
+    });
+
+    it('handles leading slashes in path', () => {
+      const result = resolveAvatar({
+        path: '/photo.jpg',
+        baseUrl: 'https://example.com',
+      });
+      expect(result).toBe('https://example.com/photo.jpg');
+    });
   });
 
   describe('getDefaultProfilePhoto', () => {

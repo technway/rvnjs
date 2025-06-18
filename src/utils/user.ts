@@ -1,39 +1,54 @@
-import { getApiBaseUrl } from './env';
+import { getApiBaseUrl, isDevEnv } from './env';
 
 /**
- * Options for getting a user's profile photo.
+ * Options for resolving a user's profile image.
  */
-export interface ProfilePhotoOptions {
-  /** The role of the user ('admin' | 'user'). */
-  role?: string | null;
-  /** Optional path to a custom profile photo. */
-  photoPath?: string | null;
-  /** Optional custom path for user avatar. Defaults to '/avatars/user.png'. */
-  userAvatarPath?: string;
-  /** Optional custom path for admin avatar. */
-  adminAvatarPath?: string;
+export interface AvatarOptions {
+  /** Custom profile image path or full URL. */
+  path?: string | null;
+  /** Fallback avatar path to use when `path` is invalid or disallowed. */
+  fallback?: string;
+  /** Optional base URL to prefix relative paths. Set to `false` to skip prefixing. */
+  baseUrl?: string | false;
 }
 
 /**
- * Returns the profile photo URL for a user.
+ * Resolves the profile image URL for a user.
  *
- * If a custom photoPath is provided, returns the full URL using the API base URL.
- * Otherwise, returns a default avatar based on the user's role.
+ * Behavior:
+ * - If `path` is an absolute HTTPS URL, returns it as-is.
+ * - If `path` is an HTTP URL, only returns it in development mode.
+ * - If `path` is a relative path, prefixes it with `baseUrl` (or `getApiBaseUrl()` if not set).
+ * - If `path` is missing or disallowed, returns `fallback` (default: `/avatars/avatar.webp`).
  *
- * @param options - The options for getting the profile photo.
- * @returns The full URL to the profile photo.
+ * @param options - Avatar resolution options.
+ * @returns The resolved profile image URL as a string.
  */
-export function getDefaultProfilePhoto({
-  role,
-  photoPath,
-  userAvatarPath = '/avatars/user.png',
-  adminAvatarPath,
-}: ProfilePhotoOptions = {}): string {
-  if (photoPath) {
-    return `${getApiBaseUrl()}/${photoPath}`;
+export function resolveAvatar({
+  path,
+  fallback = '/avatars/avatar.webp',
+  baseUrl,
+}: AvatarOptions): string {
+  if (typeof path === 'string' && path.trim()) {
+    if (/^https:\/\//.test(path)) {
+      return path;
+    }
+
+    if (/^http:\/\//.test(path)) {
+      if (isDevEnv()) return path;
+      return fallback;
+    }
+
+    if (baseUrl === false) {
+      return path;
+    }
+
+    const base = (baseUrl ?? getApiBaseUrl()).replace(/\/+$/, '');
+    const clean = path.replace(/^\/+/, '');
+    return `${base}/${clean}`;
   }
 
-  return role === 'admin' && adminAvatarPath ? adminAvatarPath : userAvatarPath;
+  return fallback;
 }
 
 /**
@@ -80,4 +95,44 @@ export function getDisplayName({
   return first.length + second.length <= 12
     ? `${first} ${second}`.trim()
     : first;
+}
+
+/**
+ * @deprecated Use `resolveAvatar` instead.
+ *
+ * Options for getting a user's profile photo.
+ */
+export interface ProfilePhotoOptions {
+  /** The role of the user ('admin' | 'user'). */
+  role?: string | null;
+  /** Optional path to a custom profile photo. */
+  photoPath?: string | null;
+  /** Optional custom path for user avatar. Defaults to '/avatars/user.png'. */
+  userAvatarPath?: string;
+  /** Optional custom path for admin avatar. */
+  adminAvatarPath?: string;
+}
+
+/**
+ * @deprecated Use `resolveAvatar` instead.
+ *
+ * Returns the profile photo URL for a user.
+ *
+ * If a custom photoPath is provided, returns the full URL using the API base URL.
+ * Otherwise, returns a default avatar based on the user's role.
+ *
+ * @param options - The options for getting the profile photo.
+ * @returns The full URL to the profile photo.
+ */
+export function getDefaultProfilePhoto({
+  role,
+  photoPath,
+  userAvatarPath = '/avatars/user.png',
+  adminAvatarPath,
+}: ProfilePhotoOptions = {}): string {
+  if (photoPath) {
+    return `${getApiBaseUrl()}/${photoPath}`;
+  }
+
+  return role === 'admin' && adminAvatarPath ? adminAvatarPath : userAvatarPath;
 }

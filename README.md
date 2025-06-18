@@ -1,97 +1,56 @@
 <div align="center">
 
-<img src="https://github.com/user-attachments/assets/867c5d8c-0c1a-45f1-87ce-cf333c4987ba" alt="RVNJS Logo" width="190">
+<img src="https://github.com/user-attachments/assets/867c5d8c-0c1a-45f1-87ce-cf333c4987ba" alt="RVNJS Logo" width="190" />
 
-<h1>RVNJS - React using Vite & Next.js Utilities</h1>
+<h1>RVNJS – Utilities for React (using Vite) and Next.js</h1>
 
-<p>A minimal utility library providing essential functions for Vite + React and Next.js applications.</p>
+<p>A minimal utility library offering essential helpers for React (using Vite) and Next.js applications.</p>
 
-<a href="https://www.npmjs.com/package/@technway/rvnjs"><img src="https://img.shields.io/npm/v/@technway/rvnjs.svg" alt="npm version"></a> <a href="https://github.com/technway/rvnjs/actions"><img src="https://github.com/technway/rvnjs/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a> <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0%2B-blue.svg" alt="TypeScript"></a>
+<a href="https://www.npmjs.com/package/@technway/rvnjs"><img src="https://img.shields.io/npm/v/@technway/rvnjs.svg" alt="npm version"></a> <a href="https://www.npmjs.com/package/@technway/rvnjs"><img src="https://img.shields.io/npm/dt/@technway/rvnjs.svg" alt="npm downloads"></a> <a href="https://github.com/technway/rvnjs/actions"><img src="https://github.com/technway/rvnjs/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a> <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0%2B-blue.svg" alt="TypeScript"></a>
 
 </div>
 
----
-
+- [Features](#features)
 - [Installation](#installation)
-- [Environment Setup](#environment-setup)
-  - [For Vite Applications](#for-vite-applications)
-  - [For Next.js Applications](#for-nextjs-applications)
-- [Usage Example](#usage-example)
-  - [Environment Utilities](#environment-utilities)
-- [TypeScript Support](#typescript-support)
 - [API Reference](#api-reference)
   - [User Utilities](#user-utilities)
+    - [Type Exports](#type-exports)
+    - [Examples](#examples)
   - [Logging Utilities](#logging-utilities)
-  - [Type Exports](#type-exports)
-  - [Environment Utilities](#environment-utilities-1)
+    - [Why use this?](#why-use-this)
+    - [Limitations](#limitations)
+    - [Comparison](#comparison)
+    - [Main Logging](#main-logging)
+    - [Dev Logging Functions](#dev-logging-functions)
+    - [Logger Methods](#logger-methods)
+    - [Type Exports](#type-exports-1)
+    - [Examples](#examples-1)
+  - [Environment Utilities](#environment-utilities)
+    - [Environment Variable Priority](#environment-variable-priority)
+    - [Type Exports](#type-exports-2)
 - [License](#license)
+
+---
+
+## Features
+
+* Automatically supports both Vite (React) and Next.js environments
+* TypeScript support with full definitions and JSDoc for all functions
+* Utilities adapt based on environment variables
+* Most-featured utilities: [Logging Utilities](#logging-utilities)
 
 ## Installation
 
 ```bash
-# Using npm
+# npm
 npm install @technway/rvnjs
 
-# Using yarn
+# yarn
 yarn add @technway/rvnjs
 
-# Using pnpm
+# pnpm
 pnpm add @technway/rvnjs
 ```
-
-## Environment Setup
-
-### For Vite Applications
-
-Add these environment variables to your `.env` file:
-
-```env
-# Required to use the API-related utils
-VITE_API_BASE_URL=https://your-api.com
-
-# Optional to use the logger util
-VITE_ENABLE_LOGGING=true
-```
-
-### For Next.js Applications
-
-Add these environment variables to your `.env.local` file:
-
-```env
-# Required to use the API-related utils
-NEXT_PUBLIC_API_URL=https://your-api.com
-
-# Optional to use the logger util
-NEXT_PUBLIC_ENABLE_LOGGING=true
-```
-
-## Usage Example
-
-### Environment Utilities
-
-```typescript
-import { isDevEnv, getApiBaseUrl } from '@technway/rvnjs';
-
-// Check if running in development
-if (isDevEnv()) {
-  console.log('Running in development mode');
-}
-
-// Get API base URL (automatically detects environment)
-const apiUrl = getApiBaseUrl();
-
-// Get API base URL with custom path
-const apiUrlWithPath = getApiBaseUrl({
-  customBaseUrl: 'https://api.example.com',
-  customApiPath: 'v1'
-});
-```
-
----
-
-## TypeScript Support
-
-This library is written in TypeScript and includes full type definitions. All functions are properly typed and documented.
 
 ---
 
@@ -99,159 +58,139 @@ This library is written in TypeScript and includes full type definitions. All fu
 
 ### User Utilities
 
-| Function                 | Description                                           | Parameters                                                                                                                                                                                                                                                                  | Returns                              | Notes                                                                                                                                                                                                                                                                                             |
-| ------------------------ | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getDefaultProfilePhoto` | Returns the profile photo URL for a user              | `options: {`<br>`  role?: string \| null` - User role ('admin' \| 'user')<br>`  photoPath?: string \| null` - Custom photo path<br>`  userAvatarPath?: string` - User avatar path (default: '/avatars/user.png')<br>`  adminAvatarPath?: string` - Admin avatar path<br>`}` | `string` - Full URL to profile photo | If `photoPath` is provided, returns full URL with API base. Otherwise uses role-based default avatars. `adminAvatarPath` is optional and only used when role is 'admin'. **Requires environment variables:** `VITE_API_BASE_URL` (Vite) or `NEXT_PUBLIC_API_URL` (Next.js) for custom photo URLs. |
-| `getDisplayName`         | Creates a user-friendly display name from a full name | `options: {`<br>`  fullName: string` - The user's full name<br>`  useFullName?: boolean` - Use full name (default: false)<br>`  maxLength?: number` - Max length for full name (default: 20)<br>`}`                                                                         | `string` - Formatted display name    | When `useFullName` is false, returns first + second word if combined length ≤ 12, otherwise just first word. Trims whitespace and handles empty strings gracefully. **No environment variables required.**                                                                                        |
+| Function                 | Description                                                        | Parameters                                                                                                          | Returns                      | Notes                                                                                                                                                                                                                                |
+| ------------------------ | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `resolveAvatar`          | Resolves a user profile image URL                                  | `options: { path?: string \| null, fallback?: string, baseUrl?: string \| false }`                                  | `string` - Final image URL   | HTTPS URLs returned as-is. HTTP URLs only allowed in dev. Relative paths are prefixed with API base URL. Fallback is returned for empty or disallowed paths. Requires `VITE_API_BASE_URL` (Vite) or `NEXT_PUBLIC_API_URL` (Next.js). |
+| `getDisplayName`         | Builds a readable name from a full name                            | `options: { fullName: string, useFullName?: boolean, maxLength?: number }`                                          | `string` - Display name      | Returns full name or a shortened version depending on flags. Trims and safely handles edge cases. No environment variables required.                                                                                                 |
+| `getDefaultProfilePhoto` | ~~Returns a user avatar based on role or fallback~~ *(deprecated)* | `options: { role?: string \| null, photoPath?: string \| null, userAvatarPath?: string, adminAvatarPath?: string }` | `string` - Profile photo URL | **Deprecated**. Use `resolveAvatar` instead. Falls back to role-specific avatars or API base + `photoPath`.                                                                                                                          |
 
-**Examples:**
+#### Type Exports
 
-```typescript
-import { getDefaultProfilePhoto, getDisplayName } from '@technway/rvnjs';
+| Type                  | Description                                         | Notes                                                                     |
+| --------------------- | --------------------------------------------------- | ------------------------------------------------------------------------- |
+| `AvatarOptions`       | Options for `resolveAvatar()`                       | `{ path?: string \| null, fallback?: string, baseUrl?: string \| false }` |
+| `DisplayNameOptions`  | Options for `getDisplayName()`                      | `{ fullName: string, useFullName?: boolean, maxLength?: number }`         |
+| `ProfilePhotoOptions` | *(Deprecated)* Legacy options for avatar resolution | Used by `getDefaultProfilePhoto()`. Prefer `AvatarOptions`.               |
 
-// Profile photo examples
-const photoUrl = getDefaultProfilePhoto({
-  role: 'user',
-  photoPath: '/uploads/profile.jpg'
-});
-// Returns: "https://your-api.com/uploads/profile.jpg"
+#### Examples
 
-const defaultPhoto = getDefaultProfilePhoto({
-  role: 'admin'
-});
-// Returns: "/avatars/admin.png"
+```ts
+import { resolveAvatar, getDisplayName } from '@technway/rvnjs';
 
-// Display name examples
-const shortName = getDisplayName({
-  fullName: 'John Doe'
-});
-// Returns: "John Doe"
+resolveAvatar({ path: 'https://example.com/photo.jpg' });
+// → 'https://example.com/photo.jpg'
 
-const longName = getDisplayName({
-  fullName: 'John Michael Doe Smith'
-});
-// Returns: "John"
+resolveAvatar({ path: '/uploads/user.jpg' });
+// → 'https://your-api.com/uploads/user.jpg'
 
-const fullName = getDisplayName({
-  fullName: 'John Michael Doe Smith',
-  useFullName: true,
-  maxLength: 15
-});
-// Returns: "John Michael..."
+getDisplayName({ fullName: 'John Michael Doe Smith' });
+// → 'John'
+
+getDisplayName({ fullName: 'John Michael Doe Smith', useFullName: true, maxLength: 15 });
+// → 'John Michael...'
 ```
+
+---
 
 ### Logging Utilities
 
-> **Why use these logging utilities instead of `console.log`?**
-> 
-> - **Environment-aware**: Logging is automatically disabled in production unless explicitly enabled
-> - **Performance**: No logging overhead in production when disabled
-> - **Centralized control**: Easy to enable/disable logging across your entire application
-> - **Visual distinction**: Emoji prefixes make it easy to quickly identify log levels in the console
-> - **Easy filtering**: Consistent log format makes it easier to filter logs in browser console using search or log level filters
+> Logging is automatically disabled in production unless explicitly enabled.
 
-> **Limitations:**
-> 
-> - **No Console Grouping**: The logger doesn't support `console.group()` and `console.groupEnd()` for hierarchical logging
-> - **No Advanced Console Features**: Advanced console features like `console.table()`, `console.time()`, and `console.profile()` are not supported
-> - **No Custom Styling**: Console styling using `%c` CSS is not supported
-> - **No Stack Traces**: Automatic stack trace formatting is not included
-> 
-> If you need these features, consider using the native `console` methods directly or extending the logger.
+#### Why use this?
 
-**Main Logger vs Development-Only Logger:**
+* 🧠 Environment-aware: auto-disables in production
+* ⚡ Zero cost in prod when unused
+* ℹ️ Emoji-prefixed logs for easier scanning
+* 🔧 Central toggle via env vars
+* 🧼 Cleaner, filterable output in browser console
 
-| Feature               | Main Logger (`logger()`)     | Development Logger (`devLog`, etc.) |
-| --------------------- | ---------------------------- | ----------------------------------- |
-| **Availability**      | When logging is enabled      | Only in development mode            |
-| **Configuration**     | Controlled by env vars       | Controlled by environment mode      |
-| **Interface**         | Method-based (`log.debug()`) | Function-based (`devLog()`)         |
-| **Customization**     | Fixed emoji prefixes         | Customizable prefixes               |
-| **Use Case**          | Application logging          | Development debugging               |
-| **Performance**       | No overhead when disabled    | No overhead when not in dev mode    |
-| **Data Handling**     | Multiple arguments           | Single data object                  |
-| **Advanced Features** | Not supported                | Not supported                       |
+#### Limitations
 
-| Function           | Description                                                   | Parameters | Returns                                                              | Notes                                                                                                                                                                                                                       |
-| ------------------ | ------------------------------------------------------------- | ---------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isLoggingEnabled` | Returns true if logging is enabled in the current environment | None       | `boolean` - True if logging is enabled                               | Checks for explicit logging flags. **Optional environment variables:** `VITE_ENABLE_LOGGING=true` (Vite) or `NEXT_PUBLIC_ENABLE_LOGGING=true` (Next.js).                                                                    |
-| `logger`           | Returns a logger instance with emoji-enhanced logging methods | None       | `LoggerType` - Logger instance with debug, info, warn, error methods | Each log level has a unique emoji prefix. Logging only occurs when `isLoggingEnabled()` returns true. **Optional environment variables:** `VITE_ENABLE_LOGGING=true` (Vite) or `NEXT_PUBLIC_ENABLE_LOGGING=true` (Next.js). |
+* No `console.group()`, `console.table()`, `console.trace()` support
+* No custom styles (`%c`)
+* Use native `console` directly for advanced cases
 
-**Development-Only Logging Utilities:**
+#### Comparison
 
-These utilities are only active in development mode and provide a simpler interface for common logging needs.
+| Feature             | `logger()` (Main Logger)          | `devLog()` etc (Dev-Only)         |
+| ------------------- | --------------------------------- | --------------------------------- |
+| Logging Mode        | Env-controlled (`ENABLE_LOGGING`) | Only in development               |
+| Interface           | Object with `.debug()` etc        | Function with `LogOptions` object |
+| Output Format       | Emoji-prefixed messages           | Emoji-prefixed messages           |
+| Performance in Prod | No-op unless explicitly enabled   | No-op always                      |
+| Use Case            | General app logging               | Dev debugging & warnings          |
 
-| Function   | Description                               | Parameters                                                      | Notes                                               |
-| ---------- | ----------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------- |
-| `devLog`   | Logs a message in development environment | `options: { message: string, data?: unknown, prefix?: string }` | Only logs if in development mode. Default prefix: 🔧 |
-| `devError` | Logs an error in development environment  | `options: { message: string, data?: unknown, prefix?: string }` | Only logs if in development mode. Default prefix: ❌ |
-| `devWarn`  | Logs a warning in development environment | `options: { message: string, data?: unknown, prefix?: string }` | Only logs if in development mode. Default prefix: ⚠️ |
-| `devInfo`  | Logs info in development environment      | `options: { message: string, data?: unknown, prefix?: string }` | Only logs if in development mode. Default prefix: ℹ️ |
+#### Main Logging
 
-**Logger Methods:**
+| Function           | Description                                    | Returns      | Notes                                                                |
+| ------------------ | ---------------------------------------------- | ------------ | -------------------------------------------------------------------- |
+| `isLoggingEnabled` | Returns true if logging is enabled             | `boolean`    | Controlled via `VITE_ENABLE_LOGGING` or `NEXT_PUBLIC_ENABLE_LOGGING` |
+| `logger`           | Returns a logger object (`debug`, `info`, etc) | `LoggerType` | Each log prefixed with emoji (🐛, ⚠️, ❌, ℹ️)                            |
 
-| Method                    | Emoji | Description         | Notes                                                  |
-| ------------------------- | ----- | ------------------- | ------------------------------------------------------ |
-| `debug(message, ...args)` | 🐛     | DEBUG level logging | Use for detailed debugging information                 |
-| `info(message, ...args)`  | ℹ️     | INFO level logging  | Use for general application information                |
-| `warn(message, ...args)`  | ⚠️     | WARN level logging  | Use for warning conditions that don't stop execution   |
-| `error(message, ...args)` | ❌     | ERROR level logging | Use for error conditions that may affect functionality |
+#### Dev Logging Functions
 
-**Type Exports:**
+| Function   | Description                      | Parameters                            | Notes             |
+| ---------- | -------------------------------- | ------------------------------------- | ----------------- |
+| `devLog`   | Logs debug in development only   | `{ message: string, data?, prefix? }` | Default prefix: 🔧 |
+| `devError` | Logs error in development only   | `{ message: string, data?, prefix? }` | Default prefix: ❌ |
+| `devWarn`  | Logs warning in development only | `{ message: string, data?, prefix? }` | Default prefix: ⚠️ |
+| `devInfo`  | Logs info in development only    | `{ message: string, data?, prefix? }` | Default prefix: ℹ️ |
 
-| Type         | Description                                               | Notes                                                                                                         |
-| ------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `LogLevel`   | TypeScript type: `'debug' \| 'info' \| 'warn' \| 'error'` | Use this type when creating custom logging functions or when you need to specify log levels programmatically. |
-| `LogOptions` | TypeScript interface for logging options                  | `{ message: string, data?: unknown, prefix?: string }` - Use for development-only logging utilities.          |
+#### Logger Methods
 
-**Environment Variables for Logging:**
-- Next.js: `NEXT_PUBLIC_ENABLE_LOGGING=true`
-- Vite: `VITE_ENABLE_LOGGING=true`
-- Automatically enabled in development mode
+| Method        | Emoji | Purpose        |
+| ------------- | ----- | -------------- |
+| `log.debug()` | 🐛     | Debugging info |
+| `log.info()`  | ℹ️     | General info   |
+| `log.warn()`  | ⚠️     | Warnings       |
+| `log.error()` | ❌     | Errors         |
 
-**Examples:**
+#### Type Exports
 
-```typescript
+| Type         | Description                       | Notes                                                  |        |           |                     |
+| ------------ | --------------------------------- | ------------------------------------------------------ | ------ | --------- | ------------------- |
+| `LogLevel`   | \`'debug'                         | 'info'                                                 | 'warn' | 'error'\` | Internal log levels |
+| `LogOptions` | Options for dev logging functions | `{ message: string, data?: unknown, prefix?: string }` |        |           |                     |
+
+#### Examples
+
+```ts
 import { logger, devLog, devError } from '@technway/rvnjs';
 
-// Using the main logger
 const log = logger();
-log.info('Application started');
-// Output: ℹ️ INFO: Application started
+log.info('App started');
+// → ℹ️ INFO: App started
 
-log.error('Failed to connect', new Error('Connection timeout'));
-// Output: ❌ ERROR: Failed to connect Error: Connection timeout
+devLog({ message: 'User loaded', data: { id: 123 } });
+// → 🔧 User loaded { id: 123 }
 
-// Using development-only utilities
-devLog({ message: 'Debug info', data: { userId: 123 } });
-// Output: 🔧 Debug info { userId: 123 }
-
-devError({ 
-  message: 'API Error', 
-  data: new Error('Network error'),
-  prefix: '🚫' // Custom prefix
-});
-// Output: 🚫 API Error Error: Network error
+devError({ message: 'Something failed', prefix: '🚫' });
+// → 🚫 Something failed
 ```
 
-### Type Exports
-
-| Type       | Description                                               | Notes                                                                                                         |
-| ---------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `LogLevel` | TypeScript type: `'debug' \| 'info' \| 'warn' \| 'error'` | Use this type when creating custom logging functions or when you need to specify log levels programmatically. |
+---
 
 ### Environment Utilities
 
-| Function        | Description                                               | Parameters                                                                                                                     | Returns                                 | Notes                                                                                                                                                                                                                                                   |
-| --------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isDevEnv`      | Returns true if running in development environment        | None                                                                                                                           | `boolean` - True if in development mode | Checks both `NODE_ENV` and Vite's `VITE_ENABLE_LOGGING` environment variables. Used internally by other utilities. **No additional environment variables required.**                                                                                    |
-| `getApiBaseUrl` | Returns the appropriate API base URL based on environment | `options: {`<br>`  customBaseUrl?: string` - Optional custom base URL<br>`  customApiPath?: string` - Optional API path<br>`}` | `string` - API base URL                 | Follows environment variable priority order. Returns empty string if no valid URL is found. Used by `getDefaultProfilePhoto` for building full URLs. **Requires environment variables:** `VITE_API_BASE_URL` (Vite) or `NEXT_PUBLIC_API_URL` (Next.js). |
+| Function        | Description                                    | Parameters                                           | Returns   | Notes                                                                                                                      |
+| --------------- | ---------------------------------------------- | ---------------------------------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `isDevEnv`      | Returns `true` if running in development mode  | None                                                 | `boolean` | Checks `NODE_ENV === 'development'` or `import.meta.env.MODE === 'development'`                                            |
+| `getApiBaseUrl` | Returns base API URL from env or custom inputs | `{ customBaseUrl?: string, customApiPath?: string }` | `string`  | Reads from `VITE_API_BASE_URL` or `NEXT_PUBLIC_API_URL`. Appends path if provided. Trailing slashes removed automatically. |
 
-**Environment Variable Priority:**
-1. Next.js: `NEXT_PUBLIC_API_URL`
-2. Vite: `VITE_API_BASE_URL`
-3. Fallback: Empty string
+#### Environment Variable Priority
+
+1. `NEXT_PUBLIC_API_URL` (Next.js)
+2. `VITE_API_BASE_URL` (Vite)
+3. `API_URL` (fallback)
+
+#### Type Exports
+
+| Type                | Description                   | Notes                                                |
+| ------------------- | ----------------------------- | ---------------------------------------------------- |
+| `ApiBaseUrlOptions` | Options for `getApiBaseUrl()` | `{ customBaseUrl?: string, customApiPath?: string }` |
+
+---
 
 ## License
 
-MIT
+MIT License © [Technway Solutions](https://technway.biz)

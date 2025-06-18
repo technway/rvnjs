@@ -18,19 +18,22 @@ export interface ApiBaseUrlOptions {
  * 3. process.env.API_URL (Node.js)
  *
  * If customBaseUrl and customApiPath are provided, always returns their joined value.
+ * Any trailing slashes will be removed from the returned URL.
  *
  * @param options - The options for getting the API base URL.
- * @returns The API base URL.
+ * @returns The API base URL without trailing slash.
  */
 export function getApiBaseUrl({
   customBaseUrl,
   customApiPath,
 }: ApiBaseUrlOptions = {}): string {
   if (customBaseUrl && customApiPath) {
-    return `${customBaseUrl.replace(/\/$/, '')}/${customApiPath.replace(/^\//, '')}`;
+    const cleanBase = customBaseUrl.replace(/\/+$/, '');
+    const cleanPath = customApiPath.replace(/^\/+|\/+$/g, '');
+    return `${cleanBase}/${cleanPath}`;
   }
   if (customBaseUrl) {
-    return customBaseUrl;
+    return customBaseUrl.replace(/\/+$/, '');
   }
 
   let baseUrl = '';
@@ -43,9 +46,13 @@ export function getApiBaseUrl({
     baseUrl = process.env.API_URL;
   }
 
-  return customApiPath
-    ? `${baseUrl.replace(/\/$/, '')}/${customApiPath.replace(/^\//, '')}`
-    : baseUrl;
+  if (customApiPath) {
+    const cleanBase = baseUrl.replace(/\/+$/, '');
+    const cleanPath = customApiPath.replace(/^\/+|\/+$/g, '');
+    return `${cleanBase}/${cleanPath}`;
+  }
+
+  return baseUrl.replace(/\/+$/, '');
 }
 
 /**

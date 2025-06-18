@@ -1,0 +1,9 @@
+{
+  "release-type": "node",
+  "prerelease": false,
+  "packages": {
+    ".": {
+      "package-name": "@technway/rvnjs"
+    }
+  }
+}
